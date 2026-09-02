@@ -63,21 +63,29 @@ get your four terminals.
 
 ## Updating
 
-If you cloned the repo, grab the latest with the one-click updater — double-click
-**`update.bat`** (or run it from the install folder). It closes any running
-QuadClaude, `git pull`s, rebuilds, and offers to re-run `setup` so new helper
-commands and config fields are picked up.
+Grab the latest with the updater from inside the repo folder:
 
-Manual equivalent:
+- **Windows:** double-click **`update.bat`** (or run it). Closes any running
+  QuadClaude, `git pull`s, rebuilds, refreshes the helper commands, and offers to
+  re-run `setup`.
+- **WSL / Ubuntu / macOS / Git Bash:** `bash update.sh` — `git pull`s, refreshes
+  the helper commands into `~/.claude/commands`, and rebuilds on Windows.
+
+The first time, `git pull` first so you actually have the updater:
 
 ```bash
 cd <your-quad-claude-standalone folder>
 git pull
-install.bat        # rebuilds; say Y to re-run setup
+bash update.sh      # or update.bat on Windows
 ```
 
-Close QuadClaude before updating so the rebuild can replace the running `.exe`.
-(On macOS, `git pull` then rebuild per [SETUP-MAC.md](SETUP-MAC.md).)
+Why the updater (not just `git pull`): the helper slash-commands are installed
+into `~/.claude/commands` **copy-if-missing**, so `git pull` alone updates the
+repo copy but not the installed one. The updater overwrites the installed copies.
+Note that `~/.claude` differs per environment — WSL/Ubuntu has its own home
+separate from Windows, so run the updater in the environment where you actually
+use Claude. Close QuadClaude before a Windows update so the rebuild can replace
+the running `.exe`.
 
 ---
 
@@ -248,4 +256,4 @@ a real machine — and lags behind the Windows app. Try it at your own risk.
 | `monday-tasks.mjs` | CLI backend for the optional Monday panel |
 | `track-cwd.sh` | Writes each quad's cwd + branch for the status widget |
 | `install.bat` / `setup.sh` | Installers (Windows batch / bash fallback) |
-| `update.bat` | One-click updater (pull + rebuild + optional setup) |
+| `update.bat` / `update.sh` | Updater — pull, refresh helper commands, rebuild (Windows / bash) |
