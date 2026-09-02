@@ -291,22 +291,42 @@ enum SetupCommandCLI {
             ? defaultDir
             : (projectsInput as NSString).expandingTildeInPath
 
-        print("\nStep 2: Permission mode")
+        // Step 2: Layout (minimal — multi-project or worktrees). Worktrees needs a
+        // base repo + base branch so LaunchCommand can emit the shared-contract
+        // launch-env vars and the launcher can open each quad's own worktree.
+        print("\nStep 2: Layout")
+        print("  1) multi-project  — each quad picks any project")
+        print("  2) worktrees      — one repo + a git worktree per quad")
+        print("  Choice [1]: ", terminator: "")
+        let layoutInput = readLine()?.trimmingCharacters(in: .whitespaces) ?? "1"
+        var layout = "multi-project"
+        var worktreeBase = ""
+        var worktreeBaseBranch = "main"
+        if layoutInput == "2" {
+            layout = "worktrees"
+            print("  Base repo name (inside projects dir): ", terminator: "")
+            worktreeBase = readLine()?.trimmingCharacters(in: .whitespaces) ?? ""
+            print("  Base branch each worktree resets to [main]: ", terminator: "")
+            let bb = readLine()?.trimmingCharacters(in: .whitespaces) ?? ""
+            if !bb.isEmpty { worktreeBaseBranch = bb }
+        }
+
+        print("\nStep 3: Permission mode")
         print("  1) bypassPermissions  2) auto  3) manual")
         print("  Choice [1]: ", terminator: "")
         let permInput = readLine()?.trimmingCharacters(in: .whitespaces) ?? "1"
         let permMode = permInput == "2" ? "auto" : permInput == "3" ? "manual" : "bypassPermissions"
 
-        print("\nStep 3: Enable sounds? [Y/n]: ", terminator: "")
+        print("\nStep 4: Enable sounds? [Y/n]: ", terminator: "")
         let soundsInput = readLine()?.trimmingCharacters(in: .whitespaces).lowercased() ?? ""
         let sounds = soundsInput != "n"
 
-        // Write config
-        let config: [String: Any] = [
+        // Write config (snake_case keys — QuadConfig decodes convertFromSnakeCase)
+        var config: [String: Any] = [
             "projects_dir": projectsDir,
             "setup_dir": (homeDir as NSString).appendingPathComponent("quad-claude-standalone"),
             "terminal_profile": "Basic",
-            "layout": "multi-project",
+            "layout": layout,
             "sounds_enabled": sounds,
             "quad_labels": ["Quad 1", "Quad 2", "Quad 3", "Quad 4"],
             "permission_mode": permMode,
@@ -316,6 +336,11 @@ enum SetupCommandCLI {
                 "Skill(update-config)", "Skill(update-config:*)"
             ]
         ]
+        if layout == "worktrees" && !worktreeBase.isEmpty {
+            config["worktree_base"] = worktreeBase
+            config["worktree_pattern"] = "{base} - Quad-{n}"
+            config["worktree_base_branch"] = worktreeBaseBranch
+        }
 
         let configPath = (supportDir as NSString).appendingPathComponent("config.json")
         if let data = try? JSONSerialization.data(withJSONObject: config, options: .prettyPrinted) {

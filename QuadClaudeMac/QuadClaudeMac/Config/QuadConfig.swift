@@ -8,6 +8,16 @@ struct QuadConfig: Codable {
     var soundsEnabled: Bool = true
     var quadLabels: [String] = ["Quad 1", "Quad 2", "Quad 3", "Quad 4"]
     var worktreeBase: String?
+    // Pattern for each quad's worktree folder name. {base}→base repo, {n}→quad number.
+    var worktreePattern: String = "{base} - Quad-{n}"
+    // Branch each worktree is reset/detached to when its quad opens (e.g. main, develop, staging).
+    var worktreeBaseBranch: String = "main"
+    // Optional command run once inside a freshly-cut worktree after env-copy + npm install
+    // (e.g. "npx prisma generate"). Runs from the worktree root. nil → skip.
+    var worktreeProvisionCommand: String?
+    // Optional subdir appended to the resolved cwd (e.g. "apps/main-app" for monorepos).
+    // Also used as the extra .env* source dir when provisioning worktrees.
+    var devServerSubdir: String?
     var dedicatedProject: String?
     var permissionMode: String = "bypassPermissions"  // bypassPermissions, auto, manual
     var allowList: [String] = [
@@ -24,6 +34,13 @@ struct QuadConfig: Codable {
         "Skill(update-config)",
         "Skill(update-config:*)"
     ]
+
+    // ── Monday.com integration (optional, off by default) ────────
+    // Master switch for any Monday surface. Off by default so the Mac port ships
+    // with no Monday integration at all. (The Mac app currently has no Monday
+    // panel/overlay UI; this field exists for config parity with Windows and to
+    // gate such UI if/when it is ported.)
+    var mondayEnabled: Bool = false
 
     // MARK: - Storage Paths
 

@@ -32,6 +32,17 @@ enum LaunchCommand {
 
         if let worktreeBase = config.worktreeBase {
             lines.append("QUADCLAUDE_WORKTREE_BASE=\"\(worktreeBase)\"")
+            lines.append("QUADCLAUDE_WORKTREE_PATTERN=\"\(config.worktreePattern)\"")
+            lines.append("QUADCLAUDE_WORKTREE_BASE_BRANCH=\"\(config.worktreeBaseBranch)\"")
+        }
+
+        // Optional worktree provisioning knobs — only emitted when set, matching
+        // the Windows launch-env.sh format (same var names/quoting).
+        if let subdir = config.devServerSubdir, !subdir.isEmpty {
+            lines.append("QUADCLAUDE_WORKTREE_SUBDIR=\"\(subdir)\"")
+        }
+        if let provisionCmd = config.worktreeProvisionCommand, !provisionCmd.isEmpty {
+            lines.append("QUADCLAUDE_PROVISION_CMD=\"\(provisionCmd)\"")
         }
 
         if let dedicatedProject = config.dedicatedProject {

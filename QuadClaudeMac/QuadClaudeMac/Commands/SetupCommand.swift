@@ -21,6 +21,11 @@ enum SetupCommand {
         if config.layout == "worktrees" {
             print("Enter the base repo name (inside projects dir):")
             config.worktreeBase = readLine()?.trimmingCharacters(in: .whitespaces) ?? ""
+            // Base branch: the up-to-date branch each worktree is cut from and
+            // reset to every time its quad opens. Mirrors C# ConfigureWorktrees.
+            print("Base branch each worktree resets to [\(config.worktreeBaseBranch)]:")
+            let bb = readLine()?.trimmingCharacters(in: .whitespaces) ?? ""
+            if !bb.isEmpty { config.worktreeBaseBranch = bb }
         } else if config.layout == "dedicated-roles" {
             print("Enter the project name or full path:")
             config.dedicatedProject = readLine()?.trimmingCharacters(in: .whitespaces) ?? ""
@@ -58,6 +63,9 @@ enum SetupCommand {
 
         // Write Claude Code hooks
         writeClaudeHooks(config: config)
+
+        // Opt-in: install the bundled helper slash-commands into ~/.claude/commands
+        installHelperCommands(config: config)
 
         // Check Accessibility permission
         print("\n  ⚠ QuadClaude needs Accessibility permission to position terminal windows.")
@@ -148,6 +156,51 @@ enum SetupCommand {
         let input = readLine()?.trimmingCharacters(in: .whitespaces).lowercased() ?? ""
         if input.isEmpty { return defaultYes }
         return input.hasPrefix("y")
+    }
+
+    // MARK: - Helper Commands
+
+    // Copy the repo's bundled slash-commands (.claude/commands/*.md) into the
+    // user's ~/.claude/commands so they work in EVERY Claude Code session on this
+    // machine. Opt-in, copy-if-missing (never clobbers a same-named command),
+    // and trivially reversible (plain files). Mirrors C# InstallHelperCommands.
+    private static func installHelperCommands(config: QuadConfig) {
+        let fm = FileManager.default
+        let srcDir = (config.setupDir as NSString).appendingPathComponent(".claude/commands")
+        guard let files = try? fm.contentsOfDirectory(atPath: srcDir) else { return }
+        let mdFiles = files.filter { $0.hasSuffix(".md") }
+        if mdFiles.isEmpty { return }
+
+        let destDir = (PathHelper.claudeDir as NSString).appendingPathComponent("commands")
+
+        print("\n  Helper commands")
+        print("  QuadClaude bundles a few optional slash-commands.")
+        print("  Installing them copies plain markdown files into:")
+        print("    \(destDir)")
+        print("  That makes them available in EVERY Claude Code session on this machine")
+        print("  (including your work worktrees). This is opt-in — say no to skip, and you")
+        print("  can remove any later by deleting its .md file from that folder.")
+
+        if !askYesNo("  Install these helper commands now?", defaultYes: true) {
+            print("  [SKIP] Helper commands not installed.")
+            return
+        }
+
+        try? fm.createDirectory(atPath: destDir, withIntermediateDirectories: true)
+        for name in mdFiles {
+            let dest = (destDir as NSString).appendingPathComponent(name)
+            if fm.fileExists(atPath: dest) {
+                print("  [SKIP] \(name) — you already have a command by this name (left it alone).")
+                continue
+            }
+            let src = (srcDir as NSString).appendingPathComponent(name)
+            do {
+                try fm.copyItem(atPath: src, toPath: dest)
+                print("  [OK] \(name)")
+            } catch {
+                print("  [FAIL] \(name) — \(error.localizedDescription)")
+            }
+        }
     }
 
     // MARK: - Claude Hooks

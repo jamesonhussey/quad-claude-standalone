@@ -24,9 +24,14 @@ else
 fi
 
 # Path to the QuadClaude executable (used to run the shared setup wizard).
+# Cross-platform: the Windows build is QuadClaude.exe; on macOS it's the
+# `quadclaude` CLI (on PATH once the Mac app is built/installed).
 _qc_exe() {
-    local exe="$QUADCLAUDE_SCRIPT_DIR/QuadClaude/publish/QuadClaude.exe"
-    [ -f "$exe" ] && { printf '%s' "$exe"; return 0; }
+    local win="$QUADCLAUDE_SCRIPT_DIR/QuadClaude/publish/QuadClaude.exe"
+    [ -f "$win" ] && { printf '%s' "$win"; return 0; }
+    if command -v quadclaude >/dev/null 2>&1; then
+        printf '%s' "$(command -v quadclaude)"; return 0
+    fi
     return 1
 }
 
@@ -258,7 +263,8 @@ quadclaude_onboarding() {
                     echo ""; "$exe" setup; echo ""
                     read -rp "  Setup done — press Enter to re-check… " _
                 else
-                    echo "  ⚠ QuadClaude.exe not found — build it first (see README), then re-run."
+                    echo "  ⚠ QuadClaude app/CLI not found — build & install it first (see README),"
+                    echo "    then run setup: QuadClaude.exe setup (Windows) or quadclaude setup (macOS)."
                     read -rp "  Press Enter… " _
                 fi
                 ;;
@@ -271,3 +277,12 @@ quadclaude_onboarding() {
         esac
     done
 }
+
+# When this file is EXECUTED directly (e.g. `bash onboarding.sh` from the macOS
+# zsh launcher, which can't safely source a bash script) rather than sourced,
+# run the checklist immediately. When sourced (Windows claude-launch.sh),
+# BASH_SOURCE[0] != $0, so this is a no-op and the launcher calls
+# quadclaude_onboarding itself.
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    quadclaude_onboarding
+fi

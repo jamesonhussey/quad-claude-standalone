@@ -202,9 +202,14 @@ add the new process name to the terminal-detection list in the source.
 
 ## macOS
 
-A Swift/AppKit port of the same ideas lives in [`QuadClaudeMac/`](QuadClaudeMac/).
-It's a work in progress and tracks the Windows version's behavior; build it with
-Xcode and configure it with `quadclaude setup`.
+A native Swift/AppKit port lives in [`QuadClaudeMac/`](QuadClaudeMac/). It is
+**experimental and untested** — developed by code review, not yet built or run on
+a real machine — and lags behind the Windows app. Try it at your own risk.
+
+- **Full build/setup guide: [SETUP-MAC.md](SETUP-MAC.md)** (prerequisites,
+  XcodeGen build, putting the `quadclaude` CLI on your PATH, `quadclaude setup`).
+- The helper slash-commands in `.claude/commands/` and the `CLAUDE.md` push
+  workflow are plain Claude Code files — they work on macOS regardless of the app.
 
 ---
 
