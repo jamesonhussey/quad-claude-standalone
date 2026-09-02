@@ -26,12 +26,12 @@ if not exist ".git" (
 )
 
 :: --- Close any running instance so the exe can be overwritten ---
-echo  [1/3] Closing any running QuadClaude...
+echo  [1/4] Closing any running QuadClaude...
 taskkill /IM QuadClaude.exe /F >nul 2>nul
 echo.
 
 :: --- Pull latest ---
-echo  [2/3] Pulling latest changes...
+echo  [2/4] Pulling latest changes...
 git pull
 if errorlevel 1 (
     echo.
@@ -43,7 +43,7 @@ if errorlevel 1 (
 echo.
 
 :: --- Rebuild ---
-echo  [3/3] Rebuilding QuadClaude...
+echo  [3/4] Rebuilding QuadClaude...
 pushd QuadClaude
 dotnet publish -c Release -r win-x64 --no-self-contained -o publish
 if errorlevel 1 (
@@ -55,6 +55,18 @@ if errorlevel 1 (
     exit /b 1
 )
 popd
+echo.
+
+:: --- Refresh the bundled helper commands ---
+:: setup installs these copy-if-missing (so it never clobbers your own commands),
+:: which means content updates to them don't propagate on their own. The updater
+:: DOES refresh the QuadClaude-bundled ones so /explain-quad-claude etc. stay current.
+echo  [4/4] Refreshing helper commands in "%USERPROFILE%\.claude\commands"...
+if exist "%~dp0.claude\commands\*.md" (
+    if not exist "%USERPROFILE%\.claude\commands" mkdir "%USERPROFILE%\.claude\commands" >nul 2>nul
+    copy /Y "%~dp0.claude\commands\*.md" "%USERPROFILE%\.claude\commands\" >nul
+    echo    Helper commands refreshed.
+)
 echo.
 
 echo  =============================================

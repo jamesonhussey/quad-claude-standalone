@@ -3,14 +3,23 @@ description: Explain how QuadClaude works — the status-widget overlay & settin
 argument-hint: "[optional: a specific topic, e.g. 'the settings cog' or 'turn off sounds']"
 ---
 
-You are explaining the **QuadClaude** setup to the person running this command.
-They may be new to it. Present the relevant parts below clearly and
-conversationally (don't just dump the whole list) — and if they passed a topic
-in `$ARGUMENTS`, focus on that. The **status-widget overlay / settings cog** is
-the part people find most confusing, so lean into that section unless they ask
-about something else. Offer to make any change for them at the end, and remind
-them they can ask about anything and can edit QuadClaude itself (last two
-sections).
+You are explaining **QuadClaude** to the person who ran this command. Explain it
+in your reply — never just point them at a file to read.
+
+**If `$ARGUMENTS` names a topic:** focus on that topic.
+
+**If `$ARGUMENTS` is empty (no topic given):** give the FULL walkthrough of every
+section below, in order — do not abbreviate or skip any. You **must** fully
+explain the section **"The status-widget overlay (and the settings cog ⚙)"** —
+walk through every control on the bar and in the settings panel — *even though
+they didn't ask about it specifically*. That overlay is what confuses people
+most, and surfacing it proactively is a primary reason this command exists. Do
+not decide it's "too much detail" and trim it; cover it in full.
+
+Keep it well-organized (use the headings below), but **completeness beats
+brevity** here — it's fine and expected for this to be long. Finish by offering to
+make any change for them, and remind them they can ask about anything confusing
+and can edit QuadClaude itself (the last two sections).
 
 # What QuadClaude is
 
