@@ -1,0 +1,26 @@
+<Window x:Class="QuadClaude.Overlay.GlowWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="False"
+        ShowInTaskbar="False"
+        IsHitTestVisible="False">
+    <Border x:Name="GlowBorder"
+            CornerRadius="6"
+            BorderThickness="4"
+            Background="Transparent"
+            Margin="6,8,6,6">
+        <Border.BorderBrush>
+            <SolidColorBrush x:Name="BorderColor" Color="#00FF88"/>
+        </Border.BorderBrush>
+        <Border.Effect>
+            <DropShadowEffect x:Name="GlowEffect"
+                              Color="#00FF88"
+                              ShadowDepth="0"
+                              BlurRadius="18"
+                              Opacity="0.9"/>
+        </Border.Effect>
+    </Border>
+</Window>

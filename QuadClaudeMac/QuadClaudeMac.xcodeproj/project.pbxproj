@@ -1,0 +1,511 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02E5577645C53B92D3EC9884 /* MessageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8091E7D9CF62DDF99708568E /* MessageProtocol.swift */; };
+		06099FF00EADE927C6A17CF8 /* AccessibilityBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9A0F38DA03CF2842374C3A /* AccessibilityBridge.swift */; };
+		0F75E9C1E5F58C2E7607CFF6 /* AppleScriptBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D2A7AF895D1A7759F20C6F /* AppleScriptBridge.swift */; };
+		27F75473A59A259CADBDE0CC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB215AB5FD6119828921357 /* main.swift */; };
+		293760B0D54AA4290494BB03 /* ProcessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF0D2B31B26D699160DD6D2 /* ProcessHelper.swift */; };
+		2EC645423A5C83EC52CC9209 /* ScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5489BA0B6E005DE93871D1C /* ScreenManager.swift */; };
+		368B425AF7EBD62CDA29B698 /* TrackCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054CA2D2BFD267726A41D01 /* TrackCommand.swift */; };
+		42265B42FEFB30CEC817A68F /* FileTreeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394918669EC85A83313CBC49 /* FileTreeNode.swift */; };
+		462065A0D7BCC331EB67C0EE /* StatusWidgetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EDAF915EAE39F17F5B106F /* StatusWidgetController.swift */; };
+		50BC5F116FC5B0319E0E38EE /* SetupCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1981DCA4EC0201DFCF554817 /* SetupCommand.swift */; };
+		6696046C86424F17DD1E3246 /* SocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48C2EB5F05BEC4E486BBC96 /* SocketServer.swift */; };
+		775BC82AC4885EC954B393B2 /* LaunchCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC4A78609E8981720BC4768 /* LaunchCommand.swift */; };
+		83D6F9EF102031D841451F5D /* GlowWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008833660C98165764443B46 /* GlowWindowController.swift */; };
+		8C93AED0C9EF3FF02CBACC6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8BAD9EC2123346D55B9B3E5 /* Assets.xcassets */; };
+		9244DD37A5D1FB79CD35F6B1 /* StatusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24E6D8935E4E9D4126E0DB2 /* StatusCommand.swift */; };
+		97F0305AE49CC45C48A7E57E /* KillGlowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E675C14F9AD54ACE743648 /* KillGlowCommand.swift */; };
+		AB6FC2AB0275C6A804AEAD9A /* GlowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99131437042C3CC4446B4139 /* GlowCommand.swift */; };
+		B1CA70EB4A3EA2F8FF3339A8 /* TerminalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9876A194358A217E2F80612 /* TerminalManager.swift */; };
+		BB1F8AAADCC46408857B4878 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61405D397F4F1BF0E1DD7DF9 /* PathHelper.swift */; };
+		C71086B1A4D8DAA630DE3D99 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 071DB96EC7A783959B868E60 /* Entitlements.plist */; };
+		CA5BDA6A2EF02797E2C42CEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D11C0997D29AA4EC14B4F /* AppDelegate.swift */; };
+		CEDB0A896C06C1A690307DBD /* FileExplorerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09231F04F3E3C577A00E9F8F /* FileExplorerController.swift */; };
+		D53EE8E4D1CC422417FC1DC6 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49064036753C0F88AAEF2906 /* Main.swift */; };
+		E965AD60BF0A6CA4D33A4722 /* CommandRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FC347DF1E48013AFFFECB7 /* CommandRouter.swift */; };
+		F833C574E5B361C65A2D5308 /* QuadConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C62E51339FB51F75FF25D3 /* QuadConfig.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0054CA2D2BFD267726A41D01 /* TrackCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCommand.swift; sourceTree = "<group>"; };
+		008833660C98165764443B46 /* GlowWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowWindowController.swift; sourceTree = "<group>"; };
+		071DB96EC7A783959B868E60 /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Entitlements.plist; sourceTree = "<group>"; };
+		09231F04F3E3C577A00E9F8F /* FileExplorerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExplorerController.swift; sourceTree = "<group>"; };
+		0BB215AB5FD6119828921357 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		12D2A7AF895D1A7759F20C6F /* AppleScriptBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleScriptBridge.swift; sourceTree = "<group>"; };
+		1981DCA4EC0201DFCF554817 /* SetupCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCommand.swift; sourceTree = "<group>"; };
+		1AF0D2B31B26D699160DD6D2 /* ProcessHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessHelper.swift; sourceTree = "<group>"; };
+		20FC347DF1E48013AFFFECB7 /* CommandRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandRouter.swift; sourceTree = "<group>"; };
+		234B8F6D53A2E2044F015F82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		394918669EC85A83313CBC49 /* FileTreeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTreeNode.swift; sourceTree = "<group>"; };
+		49064036753C0F88AAEF2906 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		61405D397F4F1BF0E1DD7DF9 /* PathHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathHelper.swift; sourceTree = "<group>"; };
+		69C62E51339FB51F75FF25D3 /* QuadConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadConfig.swift; sourceTree = "<group>"; };
+		8091E7D9CF62DDF99708568E /* MessageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageProtocol.swift; sourceTree = "<group>"; };
+		82EDAF915EAE39F17F5B106F /* StatusWidgetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWidgetController.swift; sourceTree = "<group>"; };
+		845D11C0997D29AA4EC14B4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8FC4A78609E8981720BC4768 /* LaunchCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCommand.swift; sourceTree = "<group>"; };
+		99131437042C3CC4446B4139 /* GlowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowCommand.swift; sourceTree = "<group>"; };
+		A83778497B4E854C14AB03BF /* quadclaude */ = {isa = PBXFileReference; includeInIndex = 0; path = quadclaude; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5489BA0B6E005DE93871D1C /* ScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenManager.swift; sourceTree = "<group>"; };
+		C745C2763C740B47AAEAFF21 /* QuadClaudeMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuadClaudeMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF9A0F38DA03CF2842374C3A /* AccessibilityBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityBridge.swift; sourceTree = "<group>"; };
+		D24E6D8935E4E9D4126E0DB2 /* StatusCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCommand.swift; sourceTree = "<group>"; };
+		D8BAD9EC2123346D55B9B3E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D8E675C14F9AD54ACE743648 /* KillGlowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KillGlowCommand.swift; sourceTree = "<group>"; };
+		F48C2EB5F05BEC4E486BBC96 /* SocketServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketServer.swift; sourceTree = "<group>"; };
+		F9876A194358A217E2F80612 /* TerminalManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		15911F5D236CD4306B164B10 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				20FC347DF1E48013AFFFECB7 /* CommandRouter.swift */,
+				99131437042C3CC4446B4139 /* GlowCommand.swift */,
+				D8E675C14F9AD54ACE743648 /* KillGlowCommand.swift */,
+				8FC4A78609E8981720BC4768 /* LaunchCommand.swift */,
+				1981DCA4EC0201DFCF554817 /* SetupCommand.swift */,
+				D24E6D8935E4E9D4126E0DB2 /* StatusCommand.swift */,
+				0054CA2D2BFD267726A41D01 /* TrackCommand.swift */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
+		26DA23DB4C5CBE6C7E658B07 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				09231F04F3E3C577A00E9F8F /* FileExplorerController.swift */,
+				394918669EC85A83313CBC49 /* FileTreeNode.swift */,
+				008833660C98165764443B46 /* GlowWindowController.swift */,
+				82EDAF915EAE39F17F5B106F /* StatusWidgetController.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		37BAC78ECB42C77FF85CAB02 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				61405D397F4F1BF0E1DD7DF9 /* PathHelper.swift */,
+				69C62E51339FB51F75FF25D3 /* QuadConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		8A0D2C38CABF1CCAF29779E5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A83778497B4E854C14AB03BF /* quadclaude */,
+				C745C2763C740B47AAEAFF21 /* QuadClaudeMac.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8E279339344D3641CDB0EADE /* Platform */ = {
+			isa = PBXGroup;
+			children = (
+				CF9A0F38DA03CF2842374C3A /* AccessibilityBridge.swift */,
+				12D2A7AF895D1A7759F20C6F /* AppleScriptBridge.swift */,
+				1AF0D2B31B26D699160DD6D2 /* ProcessHelper.swift */,
+				B5489BA0B6E005DE93871D1C /* ScreenManager.swift */,
+				F9876A194358A217E2F80612 /* TerminalManager.swift */,
+			);
+			path = Platform;
+			sourceTree = "<group>";
+		};
+		A756C4F5B4182596FE42B67F /* IPC */ = {
+			isa = PBXGroup;
+			children = (
+				8091E7D9CF62DDF99708568E /* MessageProtocol.swift */,
+				F48C2EB5F05BEC4E486BBC96 /* SocketServer.swift */,
+			);
+			path = IPC;
+			sourceTree = "<group>";
+		};
+		CFFA77AB6360D46EAC65E279 /* QuadClaudeMac */ = {
+			isa = PBXGroup;
+			children = (
+				845D11C0997D29AA4EC14B4F /* AppDelegate.swift */,
+				D8BAD9EC2123346D55B9B3E5 /* Assets.xcassets */,
+				071DB96EC7A783959B868E60 /* Entitlements.plist */,
+				234B8F6D53A2E2044F015F82 /* Info.plist */,
+				49064036753C0F88AAEF2906 /* Main.swift */,
+				15911F5D236CD4306B164B10 /* Commands */,
+				37BAC78ECB42C77FF85CAB02 /* Config */,
+				A756C4F5B4182596FE42B67F /* IPC */,
+				26DA23DB4C5CBE6C7E658B07 /* Overlay */,
+				8E279339344D3641CDB0EADE /* Platform */,
+			);
+			path = QuadClaudeMac;
+			sourceTree = "<group>";
+		};
+		DE83E135D2B3DDF270D8F643 = {
+			isa = PBXGroup;
+			children = (
+				F401797238F98D001C462B5C /* quadclaude */,
+				CFFA77AB6360D46EAC65E279 /* QuadClaudeMac */,
+				8A0D2C38CABF1CCAF29779E5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F401797238F98D001C462B5C /* quadclaude */ = {
+			isa = PBXGroup;
+			children = (
+				0BB215AB5FD6119828921357 /* main.swift */,
+			);
+			path = quadclaude;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3766120371B79614B64D5830 /* quadclaude */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 21BC888B3446D567F6F23AA3 /* Build configuration list for PBXNativeTarget "quadclaude" */;
+			buildPhases = (
+				1246633D01AF146FD8F96C3E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = quadclaude;
+			packageProductDependencies = (
+			);
+			productName = quadclaude;
+			productReference = A83778497B4E854C14AB03BF /* quadclaude */;
+			productType = "com.apple.product-type.tool";
+		};
+		CDF59EE8F150591082E4EE8D /* QuadClaudeMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9AE65BCEC69EAF5D16CC055A /* Build configuration list for PBXNativeTarget "QuadClaudeMac" */;
+			buildPhases = (
+				FA29BE25372C15BDAE334382 /* Sources */,
+				0BB15F679C2151DC9D8ECAC5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuadClaudeMac;
+			packageProductDependencies = (
+			);
+			productName = QuadClaudeMac;
+			productReference = C745C2763C740B47AAEAFF21 /* QuadClaudeMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1C09351EE5C163FA06C6FFD5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = DBDDA25712BB8B4D586C437A /* Build configuration list for PBXProject "QuadClaudeMac" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = DE83E135D2B3DDF270D8F643;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 8A0D2C38CABF1CCAF29779E5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CDF59EE8F150591082E4EE8D /* QuadClaudeMac */,
+				3766120371B79614B64D5830 /* quadclaude */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0BB15F679C2151DC9D8ECAC5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C93AED0C9EF3FF02CBACC6F /* Assets.xcassets in Resources */,
+				C71086B1A4D8DAA630DE3D99 /* Entitlements.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1246633D01AF146FD8F96C3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27F75473A59A259CADBDE0CC /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA29BE25372C15BDAE334382 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				06099FF00EADE927C6A17CF8 /* AccessibilityBridge.swift in Sources */,
+				CA5BDA6A2EF02797E2C42CEA /* AppDelegate.swift in Sources */,
+				0F75E9C1E5F58C2E7607CFF6 /* AppleScriptBridge.swift in Sources */,
+				E965AD60BF0A6CA4D33A4722 /* CommandRouter.swift in Sources */,
+				CEDB0A896C06C1A690307DBD /* FileExplorerController.swift in Sources */,
+				42265B42FEFB30CEC817A68F /* FileTreeNode.swift in Sources */,
+				AB6FC2AB0275C6A804AEAD9A /* GlowCommand.swift in Sources */,
+				83D6F9EF102031D841451F5D /* GlowWindowController.swift in Sources */,
+				97F0305AE49CC45C48A7E57E /* KillGlowCommand.swift in Sources */,
+				775BC82AC4885EC954B393B2 /* LaunchCommand.swift in Sources */,
+				D53EE8E4D1CC422417FC1DC6 /* Main.swift in Sources */,
+				02E5577645C53B92D3EC9884 /* MessageProtocol.swift in Sources */,
+				BB1F8AAADCC46408857B4878 /* PathHelper.swift in Sources */,
+				293760B0D54AA4290494BB03 /* ProcessHelper.swift in Sources */,
+				F833C574E5B361C65A2D5308 /* QuadConfig.swift in Sources */,
+				2EC645423A5C83EC52CC9209 /* ScreenManager.swift in Sources */,
+				50BC5F116FC5B0319E0E38EE /* SetupCommand.swift in Sources */,
+				6696046C86424F17DD1E3246 /* SocketServer.swift in Sources */,
+				9244DD37A5D1FB79CD35F6B1 /* StatusCommand.swift in Sources */,
+				462065A0D7BCC331EB67C0EE /* StatusWidgetController.swift in Sources */,
+				B1CA70EB4A3EA2F8FF3339A8 /* TerminalManager.swift in Sources */,
+				368B425AF7EBD62CDA29B698 /* TrackCommand.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		11EAA7840217615761CB5C67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = QuadClaudeMac/Entitlements.plist;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = QuadClaudeMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quadclaude.mac;
+				PRODUCT_NAME = QuadClaudeMac;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.10;
+			};
+			name = Release;
+		};
+		456C0C3D166CCC88A52662FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quadclaude.quadclaude;
+				PRODUCT_NAME = quadclaude;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+		576CE95E0A7C06C177659FEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		BC194F492E45793C4E043F4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quadclaude.quadclaude;
+				PRODUCT_NAME = quadclaude;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.10;
+			};
+			name = Release;
+		};
+		E6FD67B8A43AD775BACB8E04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FFD499D35C559D5612F4822D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = QuadClaudeMac/Entitlements.plist;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = QuadClaudeMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quadclaude.mac;
+				PRODUCT_NAME = QuadClaudeMac;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		21BC888B3446D567F6F23AA3 /* Build configuration list for PBXNativeTarget "quadclaude" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				456C0C3D166CCC88A52662FC /* Debug */,
+				BC194F492E45793C4E043F4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9AE65BCEC69EAF5D16CC055A /* Build configuration list for PBXNativeTarget "QuadClaudeMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FFD499D35C559D5612F4822D /* Debug */,
+				11EAA7840217615761CB5C67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DBDDA25712BB8B4D586C437A /* Build configuration list for PBXProject "QuadClaudeMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6FD67B8A43AD775BACB8E04 /* Debug */,
+				576CE95E0A7C06C177659FEF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1C09351EE5C163FA06C6FFD5 /* Project object */;
+}

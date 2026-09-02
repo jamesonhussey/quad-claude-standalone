@@ -1,0 +1,36 @@
+name: QuadClaudeMac
+options:
+  bundleIdPrefix: com.quadclaude
+  deploymentTarget:
+    macOS: "13.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+
+targets:
+  QuadClaudeMac:
+    type: application
+    platform: macOS
+    sources:
+      - QuadClaudeMac
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.quadclaude.mac
+        PRODUCT_NAME: QuadClaudeMac
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        SWIFT_VERSION: "5.10"
+        CODE_SIGN_ENTITLEMENTS: QuadClaudeMac/Entitlements.plist
+        INFOPLIST_FILE: QuadClaudeMac/Info.plist
+        COMBINE_HIDPI_IMAGES: true
+    entitlements:
+      path: QuadClaudeMac/Entitlements.plist
+
+  quadclaude:
+    type: tool
+    platform: macOS
+    sources:
+      - quadclaude
+    settings:
+      base:
+        PRODUCT_NAME: quadclaude
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        SWIFT_VERSION: "5.10"

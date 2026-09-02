@@ -1,0 +1,365 @@
+<Window x:Class="QuadClaude.Overlay.StatusWidget"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="False"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight"
+        MaxWidth="400">
+    <Border x:Name="RootBorder" Background="#DD1E1E2E" CornerRadius="8" Padding="0">
+        <StackPanel>
+            <!-- Compact bar (always visible) -->
+            <StackPanel x:Name="CompactBar" Orientation="Horizontal" Margin="6,4">
+
+                <!-- Editable label -->
+                <Border Background="#22FFFFFF" CornerRadius="4" Margin="0,0,3,0">
+                    <TextBox x:Name="LabelBox"
+                             MinWidth="60"
+                             MaxWidth="120"
+                             Background="Transparent"
+                             Foreground="#EEEEF0"
+                             CaretBrush="#EEEEF0"
+                             BorderThickness="0"
+                             FontSize="10"
+                             FontFamily="Segoe UI"
+                             Padding="5,2"
+                             VerticalContentAlignment="Center"/>
+                </Border>
+
+                <!-- Dev server: link + start/stop -->
+                <StackPanel x:Name="ServerPanel" Orientation="Horizontal" Margin="0,0,3,0">
+                    <Border Background="#22FFFFFF" CornerRadius="4" Padding="4,3"
+                            Cursor="Hand" MouseLeftButtonDown="OnServerLinkClick"
+                            ToolTip="Open in browser">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse x:Name="ServerDot" Width="6" Height="6" Fill="#555555"
+                                     Margin="0,0,3,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ServerLink" Text=":3000" Foreground="#6699CC"
+                                       FontSize="10" FontFamily="Cascadia Code,Consolas"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="ServerStartBtn" Background="#22FFFFFF" CornerRadius="4"
+                            Padding="5,3" Margin="2,0,0,0" Cursor="Hand"
+                            MouseLeftButtonDown="OnServerStartClick" ToolTip="Start dev server">
+                        <TextBlock Text="&#x25B6;" Foreground="#00CC77" FontSize="9"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <Border x:Name="ServerStopBtn" Background="#22FFFFFF" CornerRadius="4"
+                            Padding="5,3" Margin="2,0,0,0" Cursor="Hand"
+                            MouseLeftButtonDown="OnServerStopClick" ToolTip="Stop dev server">
+                        <TextBlock Text="&#x25A0;" Foreground="#FF5555" FontSize="9"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Branch + Project + Dir info -->
+                <Border x:Name="BranchBox" Background="#22FFFFFF" CornerRadius="4" Padding="5,3" MaxWidth="160">
+                    <StackPanel>
+                        <TextBlock x:Name="BranchText" Text="" Foreground="#00CC77"
+                                   FontSize="10" FontFamily="Cascadia Code,Consolas,Segoe UI"
+                                   TextTrimming="CharacterEllipsis"
+                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                        <TextBlock x:Name="ProjectText" Text="" Foreground="#999AAA"
+                                   FontSize="9" FontFamily="Segoe UI"
+                                   TextTrimming="CharacterEllipsis" Margin="0,-1,0,0"
+                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Phase toggle -->
+                <Border x:Name="PhaseBtn"
+                        Background="#22FFFFFF"
+                        CornerRadius="4"
+                        Padding="6,3"
+                        Margin="3,0,0,0"
+                        Cursor="Hand"
+                        MouseLeftButtonDown="OnPhaseClick">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse x:Name="PhaseDot" Width="7" Height="7" Margin="0,0,4,0"/>
+                        <TextBlock x:Name="PhaseText" Text="Active" Foreground="#EEEEF0"
+                                   FontSize="10" FontFamily="Segoe UI"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Promote this quad into the big focus pane (stays inline) -->
+                <Border x:Name="FocusStarBtn" Background="#22FFFFFF"
+                        CornerRadius="4"
+                        Padding="5,3"
+                        Margin="3,0,0,0"
+                        Cursor="Hand"
+                        MouseLeftButtonDown="OnPromoteFocusClick"
+                        ToolTip="Promote to focus (big pane)">
+                    <TextBlock Text="&#x2605;" Foreground="#FFB347" FontSize="11"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Border>
+
+                <!-- Paste image into Claude Code — PINNED inline (never collapses into the ⋯
+                     overflow); it is used constantly, so it must always be visible. -->
+                <Border x:Name="PasteImageBtn" Background="#22FFFFFF" CornerRadius="4" Padding="5,3"
+                        Margin="3,0,0,0" Cursor="Hand"
+                        MouseLeftButtonDown="OnPasteImageClick"
+                        ToolTip="Paste clipboard image into chat">
+                    <TextBlock Text="&#xE8B9;" Foreground="#999AAA" FontSize="11"
+                               FontFamily="Segoe MDL2 Assets"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Border>
+
+                <!-- Secondary buttons: inline when there's room, else collapsed into
+                     the ⋯ overflow popup (see ApplyResponsiveBar). -->
+                <StackPanel x:Name="SecondaryInline" Orientation="Horizontal">
+                    <!-- File explorer toggle -->
+                    <Border x:Name="ExplorerBtn" Background="#22FFFFFF" CornerRadius="4" Padding="5,3"
+                            Margin="3,0,0,0" Cursor="Hand"
+                            MouseLeftButtonDown="OnExplorerClick" ToolTip="File Explorer">
+                        <TextBlock Text="&#xE8B7;" Foreground="#999AAA" FontSize="11"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <!-- Monday tasks toggle -->
+                    <Border x:Name="MondayBtn" Background="#22FFFFFF" CornerRadius="4" Padding="5,3"
+                            Margin="3,0,0,0" Cursor="Hand"
+                            MouseLeftButtonDown="OnMondayClick" ToolTip="Monday tasks">
+                        <TextBlock Text="&#xE787;" Foreground="#FF9955" FontSize="11"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <!-- Gear button (expand/collapse options) -->
+                    <Border Background="#22FFFFFF" CornerRadius="4" Padding="5,3"
+                            Margin="3,0,0,0" Cursor="Hand"
+                            MouseLeftButtonDown="OnGearClick" ToolTip="Settings">
+                        <TextBlock Text="&#x2699;" Foreground="#999AAA" FontSize="12"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Overflow toggle: shown only when the bar is too narrow to fit
+                     the secondary buttons inline. -->
+                <Border x:Name="MoreBtn" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                        Margin="3,0,0,0" Cursor="Hand" Visibility="Collapsed"
+                        MouseLeftButtonDown="OnMoreClick" ToolTip="More">
+                    <TextBlock Text="&#x22EF;" Foreground="#EEEEF0" FontSize="12" FontWeight="Bold"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Overflow popup: hosts the secondary buttons when collapsed. Floats above
+                 the bar so it is never clipped by the widget's width. -->
+            <Popup x:Name="OverflowPopup" StaysOpen="False" AllowsTransparency="True"
+                   Placement="Top" PlacementTarget="{Binding ElementName=MoreBtn}">
+                <Border Background="#F21E1E2E" CornerRadius="6" Padding="4" Margin="0,0,0,4"
+                        BorderBrush="#33FFFFFF" BorderThickness="1">
+                    <StackPanel x:Name="SecondaryPopupHost" Orientation="Horizontal"/>
+                </Border>
+            </Popup>
+
+            <!-- ═══ Options panel (collapsible) ═══ -->
+            <Border x:Name="OptionsPanel" Visibility="Collapsed"
+                    BorderBrush="#33FFFFFF" BorderThickness="0,1,0,0" Padding="6,4">
+                <StackPanel>
+
+                    <!-- Branch / dir details -->
+                    <TextBlock x:Name="DetailBranch" Text="" Foreground="#888899"
+                               FontSize="9" FontFamily="Cascadia Code,Consolas" Margin="0,0,0,1"
+                               TextTrimming="CharacterEllipsis"
+                               ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                    <TextBlock x:Name="DetailDir" Text="" Foreground="#888899"
+                               FontSize="9" FontFamily="Cascadia Code,Consolas" Margin="0,0,0,4"
+                               TextTrimming="CharacterEllipsis"
+                               ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+
+                    <!-- Open missing quad -->
+                    <TextBlock Text="Open Quad" Foreground="#999AAA" FontSize="9"
+                               FontFamily="Segoe UI" Margin="0,0,0,2"/>
+                    <StackPanel x:Name="QuadButtons" Orientation="Horizontal" Margin="0,0,0,4">
+                        <Border x:Name="QuadBtn0" Background="#22FFFFFF" CornerRadius="4" Padding="8,3"
+                                Cursor="Hand" MouseLeftButtonDown="OnOpenQuadClick" Tag="0">
+                            <TextBlock Text="Q1" Foreground="#EEEEF0" FontSize="10" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="QuadBtn1" Background="#22FFFFFF" CornerRadius="4" Padding="8,3"
+                                Margin="3,0,0,0" Cursor="Hand" MouseLeftButtonDown="OnOpenQuadClick" Tag="1">
+                            <TextBlock Text="Q2" Foreground="#EEEEF0" FontSize="10" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="QuadBtn2" Background="#22FFFFFF" CornerRadius="4" Padding="8,3"
+                                Margin="3,0,0,0" Cursor="Hand" MouseLeftButtonDown="OnOpenQuadClick" Tag="2">
+                            <TextBlock Text="Q3" Foreground="#EEEEF0" FontSize="10" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="QuadBtn3" Background="#22FFFFFF" CornerRadius="4" Padding="8,3"
+                                Margin="3,0,0,0" Cursor="Hand" MouseLeftButtonDown="OnOpenQuadClick" Tag="3">
+                            <TextBlock Text="Q4" Foreground="#EEEEF0" FontSize="10" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border Background="#33BB88FF" CornerRadius="4" Padding="8,3"
+                                Margin="6,0,0,0" Cursor="Hand" MouseLeftButtonDown="OnFifthElementClick">
+                            <TextBlock x:Name="FifthElementText" Text="+ 5th" Foreground="#BB88FF" FontSize="10"
+                                       FontFamily="Segoe UI" FontStyle="Italic"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Monitor selector -->
+                    <StackPanel x:Name="MonitorRow" Orientation="Horizontal" Margin="0,0,0,4">
+                        <TextBlock Text="Monitor:" Foreground="#999AAA" FontSize="9"
+                                   FontFamily="Segoe UI" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                    </StackPanel>
+
+                    <!-- Toggle options -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                        <CheckBox x:Name="ShowLabelCheck" IsChecked="True"
+                                  Checked="OnShowLabelChanged" Unchecked="OnShowLabelChanged">
+                            <TextBlock Text="Show label" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI"/>
+                        </CheckBox>
+                        <CheckBox x:Name="ShowExplorerCheck" IsChecked="True" Margin="10,0,0,0"
+                                  Checked="OnShowExplorerChanged" Unchecked="OnShowExplorerChanged">
+                            <TextBlock Text="Show explorer" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI"/>
+                        </CheckBox>
+                        <CheckBox x:Name="ShowPhaseCheck" IsChecked="True" Margin="10,0,0,0"
+                                  Checked="OnShowPhaseChanged" Unchecked="OnShowPhaseChanged">
+                            <TextBlock Text="Show phase" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI"/>
+                        </CheckBox>
+                        <CheckBox x:Name="ShowPasteCheck" IsChecked="True" Margin="10,0,0,0"
+                                  Checked="OnShowPasteChanged" Unchecked="OnShowPasteChanged">
+                            <TextBlock Text="Show paste" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI"/>
+                        </CheckBox>
+                        <CheckBox x:Name="ShowMondayCheck" IsChecked="True" Margin="10,0,0,0"
+                                  Checked="OnShowMondayChanged" Unchecked="OnShowMondayChanged">
+                            <TextBlock Text="Show Monday" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI"/>
+                        </CheckBox>
+                    </StackPanel>
+
+                    <!-- Layout selector -->
+                    <WrapPanel Orientation="Horizontal" Margin="0,0,0,4">
+                        <TextBlock Text="Layout:" Foreground="#999AAA" FontSize="9"
+                                   FontFamily="Segoe UI" VerticalAlignment="Center" Margin="0,2,3,0"/>
+                        <Border x:Name="LayoutBtnGrid" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="0,2,0,0" Cursor="Hand" MouseLeftButtonDown="OnLayoutClick" Tag="grid">
+                            <TextBlock Text="2x2 Grid" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="LayoutBtnColumns" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="2,2,0,0" Cursor="Hand" MouseLeftButtonDown="OnLayoutClick" Tag="columns">
+                            <TextBlock Text="4 Columns" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="LayoutBtnFocus" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="2,2,0,0" Cursor="Hand" MouseLeftButtonDown="OnLayoutClick" Tag="focus">
+                            <TextBlock Text="Focus" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="LayoutBtnDual" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="2,2,0,0" Cursor="Hand" MouseLeftButtonDown="OnLayoutClick" Tag="dual">
+                            <TextBlock Text="Dual 2+2" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="LayoutBtnTwoUp" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="2,2,0,0" Cursor="Hand" MouseLeftButtonDown="OnLayoutClick" Tag="two-up">
+                            <TextBlock Text="Two-Up" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="LayoutBtnRows" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="2,2,0,0" Cursor="Hand" MouseLeftButtonDown="OnLayoutClick" Tag="rows">
+                            <TextBlock Text="Rows" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                    </WrapPanel>
+
+                    <!-- Glow color selector -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                        <TextBlock Text="Glow:" Foreground="#999AAA" FontSize="9"
+                                   FontFamily="Segoe UI" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                        <TextBlock Text="W" Foreground="#999AAA" FontSize="9"
+                                   FontFamily="Segoe UI" VerticalAlignment="Center" Margin="4,0,2,0"
+                                   ToolTip="Working (prompt submitted)"/>
+                        <Border Background="#22FFFFFF" CornerRadius="4"
+                                Padding="3,2" Cursor="Hand" MouseLeftButtonDown="OnGlowColorClick" Tag="working">
+                            <Grid Width="12" Height="12">
+                                <Ellipse x:Name="GlowWorkingSwatch" Fill="#FFB347"/>
+                                <TextBlock x:Name="GlowWorkingOff" Text="✕" Foreground="#FF5555" FontSize="10"
+                                           FontFamily="Segoe UI" FontWeight="Bold" Visibility="Collapsed"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <TextBlock Text="D" Foreground="#999AAA" FontSize="9"
+                                   FontFamily="Segoe UI" VerticalAlignment="Center" Margin="6,0,2,0"
+                                   ToolTip="Done (Claude finished)"/>
+                        <Border Background="#22FFFFFF" CornerRadius="4"
+                                Padding="3,2" Cursor="Hand" MouseLeftButtonDown="OnGlowColorClick" Tag="done">
+                            <Grid Width="12" Height="12">
+                                <Ellipse x:Name="GlowDoneSwatch" Fill="#00FF88"/>
+                                <TextBlock x:Name="GlowDoneOff" Text="✕" Foreground="#FF5555" FontSize="10"
+                                           FontFamily="Segoe UI" FontWeight="Bold" Visibility="Collapsed"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <CheckBox x:Name="IdleOverlayCheck" IsChecked="True" Margin="10,0,0,0"
+                                  Checked="OnIdleOverlayChanged" Unchecked="OnIdleOverlayChanged">
+                            <TextBlock Text="Idle overlay" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI" VerticalAlignment="Center"/>
+                        </CheckBox>
+                        <CheckBox x:Name="PartyModeCheck" IsChecked="False" Margin="10,0,0,0"
+                                  Checked="OnPartyModeChanged" Unchecked="OnPartyModeChanged">
+                            <TextBlock Text="Party mode" Foreground="#BB88FF" FontSize="9"
+                                       FontFamily="Segoe UI" FontStyle="Italic" VerticalAlignment="Center"/>
+                        </CheckBox>
+                        <CheckBox x:Name="CarouselCheck" IsChecked="False" Margin="10,0,0,0"
+                                  Checked="OnCarouselChanged" Unchecked="OnCarouselChanged"
+                                  ToolTip="Focus layout: when the big pane starts working, swap in an idle quad">
+                            <TextBlock Text="Carousel focus" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI" VerticalAlignment="Center"/>
+                        </CheckBox>
+                        <CheckBox x:Name="IdleTintCheck" IsChecked="True" Margin="10,0,0,0"
+                                  Checked="OnIdleTintChanged" Unchecked="OnIdleTintChanged"
+                                  ToolTip="Tint the idle overlay to match the glow border color">
+                            <TextBlock Text="Tint" Foreground="#999AAA" FontSize="9"
+                                       FontFamily="Segoe UI" VerticalAlignment="Center"/>
+                        </CheckBox>
+                        <Slider x:Name="IdleTintSlider" Width="60" Minimum="0" Maximum="0.6"
+                                Value="0.25" Margin="4,0,0,0" VerticalAlignment="Center"
+                                ValueChanged="OnIdleTintAmountChanged"
+                                ToolTip="Tint strength"/>
+                    </StackPanel>
+
+                    <!-- Size toggle + Action buttons -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                        <TextBlock Text="Size:" Foreground="#999AAA" FontSize="9"
+                                   FontFamily="Segoe UI" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                        <Border x:Name="SizeBtnS" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Cursor="Hand" MouseLeftButtonDown="OnSizeClick" Tag="S">
+                            <TextBlock Text="S" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="SizeBtnM" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="2,0,0,0" Cursor="Hand" MouseLeftButtonDown="OnSizeClick" Tag="M">
+                            <TextBlock Text="M" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border x:Name="SizeBtnL" Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="2,0,0,0" Cursor="Hand" MouseLeftButtonDown="OnSizeClick" Tag="L">
+                            <TextBlock Text="L" Foreground="#EEEEF0" FontSize="9" FontFamily="Segoe UI"/>
+                        </Border>
+
+                        <Border Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="8,0,0,0"
+                                Cursor="Hand" MouseLeftButtonDown="OnRestartClick">
+                            <TextBlock Text="&#x21BB; Restart" Foreground="#FFB833"
+                                       FontSize="10" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border Background="#22FFFFFF" CornerRadius="4" Padding="6,3"
+                                Margin="3,0,0,0"
+                                Cursor="Hand" MouseLeftButtonDown="OnCloseQuadClick">
+                            <TextBlock Text="&#x2715; Close" Foreground="#FF5555"
+                                       FontSize="10" FontFamily="Segoe UI"/>
+                        </Border>
+                        <Border Background="#33FF2222" CornerRadius="4" Padding="6,3"
+                                Margin="3,0,0,0"
+                                Cursor="Hand" MouseLeftButtonDown="OnCloseAllClick">
+                            <TextBlock Text="&#x2715; All" Foreground="#FF5555"
+                                       FontSize="10" FontFamily="Segoe UI" FontWeight="SemiBold"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Border>
+</Window>

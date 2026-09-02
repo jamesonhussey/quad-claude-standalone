@@ -1,0 +1,126 @@
+{
+  "_comment": "QuadClaude settings template. Replace <REPO_PATH> with the actual path to the quad-claude-standalone repo using double backslashes.",
+  "_example_repo_path": "C:\\Users\\you\\quad-claude-standalone",
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(npm install:*)",
+      "Bash(node_modules/.bin/prisma generate:*)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(npx prisma:*)",
+      "Bash(ls *.env*)",
+      "Bash(npx dotenv-cli:*)",
+      "Bash(npx dotenv:*)",
+      "Bash(npm run:*)",
+      "Bash(npx eslint:*)",
+      "Bash(node -e \":*)",
+      "Bash(winget install:*)"
+    ],
+    "defaultMode": "bypassPermissions",
+    "additionalDirectories": [
+      "<HOME>\\.claude"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -NonInteractive -Command \"(New-Object System.Media.SoundPlayer '<REPO_PATH>\\\\notification-pack\\\\Email-Notification-Inbox-Snap.wav').PlaySync()\"",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\\\QuadClaude\\\\publish\\\\QuadClaude.exe\" glow --color green",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\QuadClaude\\publish\\QuadClaude.exe\" session-state done",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\\\QuadClaude\\\\publish\\\\QuadClaude.exe\" kill-glow",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\\\QuadClaude\\\\publish\\\\QuadClaude.exe\" track",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\QuadClaude\\publish\\QuadClaude.exe\" session-state busy",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\\\QuadClaude\\\\publish\\\\QuadClaude.exe\" track",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -NonInteractive -Command \"(New-Object System.Media.SoundPlayer '<REPO_PATH>\\\\notification-pack\\\\mixkit-dry-pop-up-notification-alert-2356.wav').PlaySync()\"",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\\\QuadClaude\\\\publish\\\\QuadClaude.exe\" glow --color red",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\QuadClaude\\publish\\QuadClaude.exe\" session-state needs-input",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -NonInteractive -Command \"(New-Object System.Media.SoundPlayer '<REPO_PATH>\\\\notification-pack\\\\mixkit-dry-pop-up-notification-alert-2356.wav').PlaySync()\"",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"<REPO_PATH>\\QuadClaude\\publish\\QuadClaude.exe\" session-state busy",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
+  "skipDangerousModePermissionPrompt": true
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>IdleOverlay tint preview</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0a12; color: #ccc; font-family: "Segoe UI", system-ui, sans-serif; }
+  .controls {
+    position: sticky; top: 0; z-index: 10; background: #14141f;
+    border-bottom: 1px solid #2a2a3a; padding: 14px 20px;
+    display: flex; gap: 28px; align-items: center; flex-wrap: wrap;
+  }
+  .controls label { font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
+  .controls .val { font-family: "Cascadia Code", Consolas, monospace; color: #8ab4ff; }
+  input[type=range] { width: 200px; }
+  .note { font-size: 12px; color: #777; max-width: 320px; line-height: 1.4; }
+  .stage { display: flex; gap: 28px; padding: 28px; flex-wrap: wrap; }
+  .col h3 { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: #aab; }
+
+  /* Mock terminal */
+  .term {
+    position: relative; width: 420px; height: 340px; border-radius: 8px; overflow: hidden;
+    background: #0c0c14; border: 1px solid #1c1c28;
+    font-family: "Cascadia Code", Consolas, monospace; font-size: 11px; line-height: 1.5;
+  }
+  .term .lines { padding: 10px 12px; color: #4a5568; white-space: pre; }
+  .term .lines .g { color: #3a5a3a; }
+  .term .lines .b { color: #3a4a6a; }
+
+  /* Glow border = corresponding state color (drawn behind terminal in app; shown here for reference) */
+  .border { position: absolute; inset: 6px; border-radius: 6px; border: 4px solid var(--state);
+            pointer-events: none; box-shadow: 0 0 18px var(--state); opacity: 0.9; }
+
+  /* WORKING: full-bleed scrim (Inset=3, no rounding), animation sits behind content */
+  .working-scrim { position: absolute; inset: 3px; background: var(--tint-cc);
+                   display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+  .anim-hint { position: absolute; inset: 3px; display: flex; align-items: center; justify-content: center;
+               color: rgba(255,255,255,0.06); font-size: 40px; pointer-events: none; }
+
+  /* DONE: floating centered rounded panel (CornerRadius=8, ~0xF5) */
+  .done-panel { position: absolute; left: 3px; right: 3px; top: 50%; transform: translateY(-50%);
+                height: 170px; background: var(--tint-f5); border-radius: 8px;
+                display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+
+  .status { font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--state); margin-bottom: 8px; }
+  .title { font-size: 18px; font-weight: 600; color: #eeeef0; text-align: center; margin-bottom: 12px; }
+  .branch { display: flex; align-items: center; gap: 6px; font-family: "Cascadia Code", Consolas, monospace; font-size: 13px; color: #00cc77; }
+  .branch .dot { width: 7px; height: 7px; border-radius: 50%; background: #00cc77; }
+  .hint { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-size: 10px; color: rgba(255,255,255,0.27); }
+  .cap { text-align: center; margin-top: 10px; font-size: 12px; }
+  .cap .hex { font-family: "Cascadia Code", Consolas, monospace; color: #8ab4ff; }
+</style>
+</head>
+<body>
+  <div class="controls">
+    <label>Tint amount <span class="val" id="tintVal">0.18</span>
+      <input id="tint" type="range" min="0" max="0.6" step="0.01" value="0.25">
+    </label>
+    <label>Base color <span class="val" id="baseVal">#12121E</span>
+      <input id="base" type="color" value="#12121e">
+    </label>
+    <div class="note">Models Jameson's two modes: <b>Working</b> = full-bleed scrim (alpha 0xCC, animation behind) · <b>Done</b> = floating rounded panel (alpha 0xF5). Tint is the only shared knob; alphas are fixed per panel.</div>
+  </div>
+
+  <div class="stage" id="stage"></div>
+
+<script>
+const SCENES = [
+  { mode: "Working", label: "WORKING", color: "#FFB347", alpha: 0xCC },
+  { mode: "Done",    label: "DONE",    color: "#00FF88", alpha: 0xF5 },
+];
+
+const hexToRgb = h => { h = h.replace('#',''); return [0,2,4].map(i => parseInt(h.substr(i,2),16)); };
+const toHex = n => n.toString(16).padStart(2,'0').toUpperCase();
+
+function tintColor(borderHex, baseHex, tint, alpha) {
+  const [br,bg,bb] = hexToRgb(borderHex);
+  const [r0,g0,b0] = hexToRgb(baseHex);
+  const r = Math.round(r0 + (br - r0) * tint);
+  const g = Math.round(g0 + (bg - g0) * tint);
+  const b = Math.round(b0 + (bb - b0) * tint);
+  return { css: `rgba(${r},${g},${b},${(alpha/255).toFixed(3)})`, argb: `#${toHex(alpha)}${toHex(r)}${toHex(g)}${toHex(b)}` };
+}
+
+const fakeTerm =
+`> npm run build
+<span class="g">✓ compiled in 2.3s</span>
+> git status
+On branch <span class="b">feature/onboarding</span>
+> _`;
+
+function render() {
+  const tint = parseFloat(document.getElementById('tint').value);
+  const base = document.getElementById('base').value;
+  document.getElementById('tintVal').textContent = tint.toFixed(2);
+  document.getElementById('baseVal').textContent = base.toUpperCase();
+
+  const stage = document.getElementById('stage');
+  stage.innerHTML = '';
+  for (const s of SCENES) {
+    const t = tintColor(s.color, base, tint, s.alpha);
+    const inner = s.mode === "Working"
+      ? `<div class="anim-hint">◠ ◡ ◠</div>
+         <div class="working-scrim">
+           <div class="status">${s.label}</div>
+           <div class="title">Adjust idle overlay tint</div>
+           <div class="branch"><span class="dot"></span>feature/onboarding</div>
+           <div class="hint">click anywhere to dismiss</div>
+         </div>`
+      : `<div class="done-panel">
+           <div class="status">${s.label}</div>
+           <div class="title">Adjust idle overlay tint</div>
+           <div class="branch"><span class="dot"></span>feature/onboarding</div>
+         </div>`;
+    const el = document.createElement('div');
+    el.className = 'col';
+    el.innerHTML = `
+      <h3>${s.mode} mode</h3>
+      <div class="term" style="--state:${s.color};--tint-cc:${t.css};--tint-f5:${t.css}">
+        <div class="lines">${fakeTerm}</div>
+        <div class="border"></div>
+        ${inner}
+      </div>
+      <div class="cap">${s.mode} backdrop → <span class="hex">${t.argb}</span></div>`;
+    stage.appendChild(el);
+  }
+}
+
+for (const id of ['tint','base']) document.getElementById(id).addEventListener('input', render);
+render();
+</script>
+</body>
+</html>

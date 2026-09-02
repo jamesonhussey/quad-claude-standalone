@@ -1,0 +1,207 @@
+<Window x:Class="QuadClaude.Overlay.MondayPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:QuadClaude.Overlay"
+        WindowStyle="None"
+        Background="#FF1E1E2E"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Width="300">
+
+    <Window.Resources>
+        <local:StatusToBrushConverter x:Key="StatusBarConverter"/>
+        <local:StatusToBrushConverter x:Key="StatusPillConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <!-- Dark scrollbar -->
+        <Style TargetType="Thumb" x:Key="DarkThumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border Background="#55AAAACC" CornerRadius="3" Margin="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Track x:Name="PART_Track" IsDirectionReversed="True">
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource DarkThumb}"/>
+                            </Track.Thumb>
+                        </Track>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border BorderThickness="2" BorderBrush="#55FF7755" CornerRadius="2">
+    <Border ClipToBounds="True" BorderThickness="1" BorderBrush="#33FF9955" CornerRadius="1">
+        <DockPanel>
+            <!-- Header -->
+            <Border DockPanel.Dock="Top" Background="#22FFFFFF" Padding="8,6">
+                <DockPanel>
+                    <Border DockPanel.Dock="Left" Background="#22FFFFFF" CornerRadius="4"
+                            Padding="6,2" Margin="0,0,6,0" Cursor="Hand" MouseLeftButtonDown="OnCloseClick"
+                            ToolTip="Close panel">
+                        <TextBlock Text="&#x2715;" Foreground="#999AAA" FontSize="11" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Monday" Foreground="#EEEEF0" FontSize="12"
+                               FontFamily="Segoe UI" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                </DockPanel>
+            </Border>
+
+            <!-- Toolbar: cycle + refresh + open -->
+            <Border DockPanel.Dock="Top" Background="#11FFFFFF" Padding="6,4">
+                <DockPanel>
+                    <Border Background="#22FFFFFF" CornerRadius="4" Padding="8,2" Margin="0,0,4,0"
+                            Cursor="Hand" MouseLeftButtonDown="OnPrevClick" ToolTip="Previous task">
+                        <TextBlock Text="&#x25B2;" FontSize="9" Foreground="#CCCCDD"/>
+                    </Border>
+                    <Border Background="#22FFFFFF" CornerRadius="4" Padding="8,2" Margin="0,0,4,0"
+                            Cursor="Hand" MouseLeftButtonDown="OnNextClick" ToolTip="Next task">
+                        <TextBlock Text="&#x25BC;" FontSize="9" Foreground="#CCCCDD"/>
+                    </Border>
+                    <Border Background="#22FFFFFF" CornerRadius="4" Padding="8,2"
+                            Cursor="Hand" MouseLeftButtonDown="OnRefreshClick" ToolTip="Refresh">
+                        <TextBlock Text="&#x21BB;" FontSize="10" Foreground="#CCCCDD"/>
+                    </Border>
+                    <Border DockPanel.Dock="Right" Background="#3300CC77" CornerRadius="4" Padding="8,2"
+                            Cursor="Hand" MouseLeftButtonDown="OnOpenClick"
+                            ToolTip="Open the selected task's Claude session in this quad">
+                        <TextBlock Text="&#x25B6; Open" FontSize="10" Foreground="#AEFFD7" FontWeight="SemiBold"/>
+                    </Border>
+                </DockPanel>
+            </Border>
+
+            <!-- Status / error line -->
+            <TextBlock x:Name="StatusLine" DockPanel.Dock="Bottom" Foreground="#8888AA"
+                       FontSize="9" FontFamily="Segoe UI" Padding="8,4" TextWrapping="Wrap"
+                       Text="Loading…"/>
+
+            <!-- Task list -->
+            <ListBox x:Name="TaskList"
+                     Background="#001E1E2E" BorderThickness="0" Padding="2"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     VirtualizingStackPanel.IsVirtualizing="True"
+                     MouseDoubleClick="OnListDoubleClick">
+                <ListBox.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#33FF9955"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#EEEEF0"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#22FF9955"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#EEEEF0"/>
+                </ListBox.Resources>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="0,1"/>
+                        <!-- Card chrome lives on the container so native selection works.
+                             Orange = selected; neutral grey = hover. -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="Card" CornerRadius="4" BorderThickness="1"
+                                            Background="#14FFFFFF" BorderBrush="Transparent">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Card" Property="Background" Value="#1EFFFFFF"/>
+                                            <Setter TargetName="Card" Property="BorderBrush" Value="#2EFFFFFF"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Card" Property="Background" Value="#33FF9955"/>
+                                            <Setter TargetName="Card" Property="BorderBrush" Value="#FFB066"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel MouseLeftButtonUp="OnRowClick" MouseRightButtonUp="OnRowRightClick"
+                                   Background="#01000000">
+                                <!-- Status color bar -->
+                                <Border DockPanel.Dock="Left" Width="4" CornerRadius="2,0,0,2"
+                                        Background="{Binding Status, Converter={StaticResource StatusBarConverter}}"/>
+                                <StackPanel Margin="4,4,6,4">
+                                    <DockPanel>
+                                        <!-- caret: ▸ / ▾ when there are subtasks -->
+                                        <TextBlock DockPanel.Dock="Left" Text="{Binding CaretGlyph}"
+                                                   Foreground="#8899BB" FontSize="10" Width="12"
+                                                   Margin="0,1,2,0" VerticalAlignment="Top" TextAlignment="Center"/>
+                                        <!-- ● green dot when this task already has a local session -->
+                                        <Ellipse DockPanel.Dock="Left" Width="6" Height="6" Margin="0,4,5,0"
+                                                 VerticalAlignment="Top" Fill="#00CC77"
+                                                 Visibility="{Binding HasSession, Converter={StaticResource BoolToVis}}"
+                                                 ToolTip="Has a local Claude session — Open will resume it"/>
+                                        <TextBlock Text="{Binding DisplayName}" Foreground="#EEEEF0"
+                                                   FontSize="11" FontFamily="Segoe UI" TextWrapping="Wrap"/>
+                                    </DockPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="14,3,0,0">
+                                        <Border CornerRadius="3" Padding="4,1" Margin="0,0,4,0"
+                                                Background="{Binding Status, Converter={StaticResource StatusPillConverter}}">
+                                            <TextBlock Text="{Binding Status}" FontSize="8" Foreground="#FFFFFF"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding Priority}" FontSize="8" Foreground="#BBBBCC"
+                                                   VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                        <TextBlock Text="{Binding Owner}" FontSize="8" Foreground="#7788AA"
+                                                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                    <!-- subtasks dropdown (single-click the row to toggle) -->
+                                    <ItemsControl ItemsSource="{Binding Subtasks}" Margin="14,4,0,2"
+                                                  Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVis}}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="3" Padding="3,1" Margin="0,1" BorderThickness="1"
+                                                        Cursor="Hand"
+                                                        MouseLeftButtonDown="OnSubtaskMouseDown"
+                                                        MouseLeftButtonUp="OnSubtaskMouseUp"
+                                                        MouseRightButtonUp="OnSubtaskRightClick"
+                                                        ToolTip="Double-click to open as its own session · right-click for options">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="#22FFFFFF"/>
+                                                                    <Setter Property="BorderBrush" Value="#55FF9955"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <DockPanel>
+                                                        <!-- ● when this subtask has its own session -->
+                                                        <Ellipse DockPanel.Dock="Right" Width="5" Height="5" Margin="4,3,2,0"
+                                                                 VerticalAlignment="Top" Fill="#00CC77"
+                                                                 Visibility="{Binding HasSession, Converter={StaticResource BoolToVis}}"/>
+                                                        <Border DockPanel.Dock="Left" Width="6" Height="6" CornerRadius="3"
+                                                                Margin="0,3,5,0" VerticalAlignment="Top"
+                                                                Background="{Binding Status, Converter={StaticResource StatusBarConverter}}"/>
+                                                        <TextBlock Text="{Binding DisplayName}" Foreground="#C8C8D6"
+                                                                   FontSize="9" FontFamily="Segoe UI" TextWrapping="Wrap"/>
+                                                    </DockPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+    </Border>
+    </Border>
+</Window>

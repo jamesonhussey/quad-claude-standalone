@@ -1,0 +1,70 @@
+<Window x:Class="QuadClaude.Overlay.IdleOverlay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="False"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize">
+    <Grid>
+        <!-- ═══ WORKING STATE: full overlay with animation ═══ -->
+        <Grid x:Name="WorkingPanel" Visibility="Collapsed">
+            <Border x:Name="WorkingBorder" Background="#CC1A1A2E"/>
+            <Canvas x:Name="AnimationCanvas" ClipToBounds="True"/>
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                        MaxWidth="500" Margin="40,20">
+                <TextBlock x:Name="WorkingStatusLabel" Text="WORKING"
+                           FontSize="11" FontFamily="Segoe UI" FontWeight="SemiBold"
+                           TextAlignment="Center" Margin="0,0,0,8"/>
+                <TextBlock x:Name="WorkingTitleText" Text=""
+                           Foreground="#EEEEF0" FontSize="22" FontFamily="Segoe UI"
+                           FontWeight="SemiBold" TextWrapping="Wrap"
+                           TextAlignment="Center" Margin="0,0,0,8"/>
+                <Canvas x:Name="SpinnerCanvas" Width="80" Height="80"
+                        ClipToBounds="True" HorizontalAlignment="Center"
+                        Visibility="Collapsed"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Ellipse Width="7" Height="7" Fill="#00CC77"
+                             VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="WorkingBranchText" Text=""
+                               Foreground="#00CC77" FontSize="13"
+                               FontFamily="Cascadia Code,Consolas"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock Text="click anywhere to dismiss"
+                       Foreground="#44FFFFFF" FontSize="10" FontFamily="Segoe UI"
+                       HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,12"/>
+        </Grid>
+
+        <!-- ═══ DONE STATE: floating centered panel ═══ -->
+        <Grid x:Name="DonePanel" Visibility="Collapsed">
+            <Border x:Name="DoneBorder" Background="#F51A1A2E" CornerRadius="8">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                            MaxWidth="500" Margin="24,16">
+                    <TextBlock x:Name="DoneStatusLabel" Text="DONE"
+                               FontSize="11" FontFamily="Segoe UI" FontWeight="SemiBold"
+                               TextAlignment="Center" Margin="0,0,0,8"/>
+                    <TextBlock x:Name="DoneTitleText" Text=""
+                               Foreground="#EEEEF0" FontSize="22" FontFamily="Segoe UI"
+                               FontWeight="SemiBold" TextWrapping="Wrap"
+                               TextAlignment="Center" Margin="0,0,0,12"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Ellipse Width="7" Height="7" Fill="#00CC77"
+                                 VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="DoneBranchText" Text=""
+                                   Foreground="#00CC77" FontSize="13"
+                                   FontFamily="Cascadia Code,Consolas"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Text="click to dismiss"
+                               Foreground="#44FFFFFF" FontSize="9" FontFamily="Segoe UI"
+                               TextAlignment="Center" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
