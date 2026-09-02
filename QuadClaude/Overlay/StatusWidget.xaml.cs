@@ -1545,7 +1545,7 @@ public partial class StatusWidget : Window
         public string? Label { get; set; }
         public string? Phase { get; set; }
         public string? Size { get; set; }
-        public bool ShowLabel { get; set; } = true;
+        public bool ShowLabel { get; set; } = false;
         public bool ShowExplorer { get; set; } = true;
         public bool ShowPhase { get; set; } = true;
         public bool ShowPaste { get; set; } = true;

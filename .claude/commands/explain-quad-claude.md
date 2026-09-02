@@ -1,12 +1,16 @@
 ---
-description: Explain how QuadClaude works — the quad grid, glow/sound cues, worktrees, the push→base-branch flow, and how to turn off anything you don't like.
-argument-hint: "[optional: a specific topic, e.g. 'glow colors' or 'turn off sounds']"
+description: Explain how QuadClaude works — the status-widget overlay & settings cog, the quad grid, glow/sound cues, worktrees, the push→base-branch flow, and how to change or turn off anything.
+argument-hint: "[optional: a specific topic, e.g. 'the settings cog' or 'turn off sounds']"
 ---
 
 You are explaining the **QuadClaude** setup to the person running this command.
 They may be new to it. Present the relevant parts below clearly and
 conversationally (don't just dump the whole list) — and if they passed a topic
-in `$ARGUMENTS`, focus on that. Offer to make any change for them at the end.
+in `$ARGUMENTS`, focus on that. The **status-widget overlay / settings cog** is
+the part people find most confusing, so lean into that section unless they ask
+about something else. Offer to make any change for them at the end, and remind
+them they can ask about anything and can edit QuadClaude itself (last two
+sections).
 
 # What QuadClaude is
 
@@ -20,7 +24,50 @@ you can run four sessions at once. Each window is a "quad."
   - **Red** = Claude is waiting on you (a permission prompt or idle). An alert sound plays.
   - **Amber/orange** = Claude is actively working.
   - The glow clears the moment you submit your next prompt.
-- **Status widget** per quad: shows the quad's label, current project, and git branch.
+
+# The status-widget overlay (and the settings cog ⚙)
+
+Every quad has a small floating widget bar. The left side is always visible; the
+**gear (⚙)** opens a settings panel with the rest. This is the part most people
+find confusing, so here's every control:
+
+**The always-visible bar:**
+- **Label** — an editable name for this quad. **Hidden by default**; turn it on
+  with *Show label* in settings.
+- **Dev-server pill `:3000`** — click it to open `http://localhost:<port>` in
+  your browser. The dot beside it is grey when the server's off, lit when it's up.
+  - **▶ (play)** — start this quad's dev server in a new terminal tab (runs your
+    configured dev command, e.g. `npm run dev -- --port 3000`).
+  - **■ (stop)** — stop that dev server.
+- **Branch / project box** — the current git branch and folder for this quad.
+- **Phase dot + text** (e.g. "Active") — click to cycle a manual status *you* set
+  for yourself (a quick "where am I on this" marker); it also flashes the glow.
+- **★ (focus star)** — promote this quad into the big pane when you're in a Focus
+  layout.
+- **Paste-image button** — paste a clipboard image straight into the Claude chat.
+- **Explorer** — a file-tree browser for this quad's folder.
+- **⚙ (gear)** — opens the settings panel below.
+- **⋯ (more)** — overflow for buttons that don't fit when the widget is narrow.
+
+**The settings panel (open the gear ⚙):**
+- **Open Quad — Q1–Q4 / +5th** — jump focus to a specific quad, or spawn an extra
+  5th session.
+- **Monitor** — which display the grid uses.
+- **Toggles** — show/hide each bar item: *Show label* (off by default),
+  *Show explorer*, *Show phase*, *Show paste*, *Show Monday*.
+- **Layout selector** — rearrange **all four** windows on the monitor:
+  **2×2 Grid**, **4 Columns**, **Focus** (one big + the rest small), **Dual 2+2**,
+  **Two-Up**, **Rows**. Just click one and the windows snap into it — try a few
+  and keep whatever fits your screen.
+- **Glow colors — W / D** — click the **W** (working) or **D** (done) swatch to
+  change that glow's color, or the ✕ to disable it.
+- **Idle overlay / Party mode / Carousel focus / Tint (+ slider)** — optional
+  cosmetic behaviors for when a quad sits idle.
+- **Size — S / M / L** — how big the widget bar itself is.
+- **↻ Restart** — close and relaunch this quad's terminal.
+
+If any of this doesn't behave the way it's described, that's fixable — it's your
+code now (see "Make it your own" below).
 
 # One worktree per quad (the mental model)
 
@@ -71,5 +118,26 @@ Nothing here is mandatory. To change behavior:
   return-to-base flow doesn't fit your job, edit or delete `CLAUDE.md` in your
   repo — QuadClaude doesn't force it.
 
-After explaining, ask if they'd like you to open `config.json`, adjust a
-setting, or walk through creating their worktrees.
+# Ask about anything
+
+If *any* part of QuadClaude is confusing or surprising — a button on the overlay,
+a glow color, a setting, a behavior you didn't expect — just ask. There's no
+wrong question here; it's better to ask than to guess.
+
+# Make it your own (change QuadClaude itself)
+
+QuadClaude is **your code now** — you're not stuck with how it ships. If something
+isn't working, or you want a feature it doesn't have:
+
+- **Open the repo in any editor** and change it. For VS Code:
+  `code <path-to-quad-claude-standalone>`. The pieces:
+  - `QuadClaude/` — the Windows C# app (overlay, glow, launcher logic)
+  - `claude-launch.sh` / `onboarding.sh` — the per-quad launch + setup flow
+  - `.claude/commands/` — these helper commands (plain markdown, edit freely)
+  - `config.json` (`%APPDATA%\QuadClaude\`) — your settings
+- **Rebuild after C# changes:**
+  `cd QuadClaude && dotnet publish -c Release -r win-x64 --no-self-contained -o publish`
+- **Or just tell me** what you want changed and I'll edit the code for you.
+
+After explaining, ask if they'd like you to open `config.json`, adjust a setting,
+walk through creating their worktrees, or change something about QuadClaude itself.

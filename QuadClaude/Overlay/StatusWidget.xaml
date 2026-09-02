@@ -14,8 +14,8 @@
             <!-- Compact bar (always visible) -->
             <StackPanel x:Name="CompactBar" Orientation="Horizontal" Margin="6,4">
 
-                <!-- Editable label -->
-                <Border Background="#22FFFFFF" CornerRadius="4" Margin="0,0,3,0">
+                <!-- Editable label (hidden by default; enable via Settings ▸ Show label) -->
+                <Border Background="#22FFFFFF" CornerRadius="4" Margin="0,0,3,0" Visibility="Collapsed">
                     <TextBox x:Name="LabelBox"
                              MinWidth="60"
                              MaxWidth="120"
@@ -209,7 +209,7 @@
 
                     <!-- Toggle options -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                        <CheckBox x:Name="ShowLabelCheck" IsChecked="True"
+                        <CheckBox x:Name="ShowLabelCheck" IsChecked="False"
                                   Checked="OnShowLabelChanged" Unchecked="OnShowLabelChanged">
                             <TextBlock Text="Show label" Foreground="#999AAA" FontSize="9"
                                        FontFamily="Segoe UI"/>
