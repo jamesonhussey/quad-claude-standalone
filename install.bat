@@ -26,30 +26,42 @@ echo.
 echo  [1/4] Checking prerequisites...
 echo.
 
-where dotnet >nul 2>nul
+:: QuadClaude targets net9.0-windows, so an older SDK (e.g. .NET 8) CANNOT build
+:: it. Detect a real .NET 9+ SDK; if none is present, auto-install it with winget
+:: and re-check. Hard-block if it still isn't available (no "continue anyway").
+call :detect_net9
+if defined HAVE_NET9 goto :sdk_ok
+
+echo    No .NET 9+ SDK found (an older SDK like .NET 8 can't build QuadClaude).
+echo    Attempting to install the .NET 9 SDK with winget...
+echo.
+where winget >nul 2>nul
 if errorlevel 1 (
-    echo  ERROR: .NET 9 SDK is not installed.
-    echo.
-    echo  To install it, open PowerShell and run:
-    echo    winget install Microsoft.DotNet.SDK.9
-    echo.
-    echo  Then re-run this installer.
+    echo    ERROR: winget isn't available to auto-install the SDK.
+    echo    Install the .NET 9 SDK manually, then re-run install.bat:
+    echo      https://dotnet.microsoft.com/download/dotnet/9.0
     echo.
     pause
     exit /b 1
 )
 
-for /f "tokens=1 delims=." %%v in ('dotnet --version 2^>nul') do set "DOTNET_MAJOR=%%v"
-if "!DOTNET_MAJOR!" lss "9" (
-    echo  WARNING: Found .NET SDK !DOTNET_MAJOR! but QuadClaude needs .NET 9.
-    echo  Install it: winget install Microsoft.DotNet.SDK.9
-    echo.
-    set /p "CONT=  Continue anyway? [y/N]: "
-    if /i not "!CONT!"=="y" exit /b 1
-    echo.
-)
+winget install --id Microsoft.DotNet.SDK.9 -e --source winget --accept-source-agreements --accept-package-agreements
+echo.
 
-for /f "tokens=*" %%d in ('dotnet --version') do echo    .NET SDK %%d -- OK
+call :detect_net9
+if defined HAVE_NET9 goto :sdk_ok
+
+echo    ERROR: .NET 9 SDK still not detected after installing.
+echo    Close this window, open a NEW terminal (so PATH refreshes), and run
+echo    install.bat again. If it still fails, install manually:
+echo      https://dotnet.microsoft.com/download/dotnet/9.0
+echo.
+pause
+exit /b 1
+
+:sdk_ok
+for /f "tokens=*" %%d in ('dotnet --version 2^>nul') do set "DOTNET_VER=%%d"
+echo    .NET SDK !DOTNET_VER! (9+) -- OK
 echo.
 
 :: =============================================
@@ -189,3 +201,18 @@ echo         and "Pin to taskbar" for one-click launches.
 echo  =============================================
 echo.
 pause
+exit /b 0
+
+:: ============================================================
+::  Subroutines
+:: ============================================================
+
+:: Sets HAVE_NET9=1 if a .NET SDK with major version >= 9 is installed.
+:detect_net9
+set "HAVE_NET9="
+where dotnet >nul 2>nul
+if errorlevel 1 goto :eof
+for /f "tokens=1 delims=." %%a in ('dotnet --list-sdks 2^>nul') do (
+    if %%a GEQ 9 set "HAVE_NET9=1"
+)
+goto :eof

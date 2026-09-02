@@ -29,7 +29,10 @@ window by walking up the process tree, so it never glows an unrelated app.
 
 ## Prerequisites
 
-- **.NET 9 SDK** — `winget install Microsoft.DotNet.SDK.9`
+- **.NET 9 SDK** — required to build (QuadClaude targets `net9.0`; an older SDK
+  like .NET 8 can't build it). `install.bat` / `setup.sh` will **auto-install it
+  with winget** if it's missing, or grab it from
+  <https://dotnet.microsoft.com/download/dotnet/9.0>.
 - **Git for Windows** — provides the `bash` used by the launcher
 - **Claude Code CLI** — installed and working
 

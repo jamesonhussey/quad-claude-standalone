@@ -32,13 +32,27 @@ PROJECTS_DIR="${PROJECTS_DIR/#\~/$HOME}"
 echo "→ Projects dir: $PROJECTS_DIR"
 echo ""
 
-# --- Check .NET SDK ---
-if ! command -v dotnet &>/dev/null; then
-    echo "❌ .NET SDK not found. Install it first:"
-    echo "   winget install Microsoft.DotNet.SDK.9"
-    exit 1
+# --- Check for a .NET 9+ SDK (net9.0 can't be built by older SDKs) ---
+have_net9() {
+    command -v dotnet &>/dev/null || return 1
+    dotnet --list-sdks 2>/dev/null | grep -qE '^(9|[1-9][0-9])\.'
+}
+
+if ! have_net9; then
+    echo "→ No .NET 9+ SDK found (an older SDK like .NET 8 can't build QuadClaude)."
+    if command -v winget &>/dev/null; then
+        echo "  Installing the .NET 9 SDK with winget..."
+        winget install --id Microsoft.DotNet.SDK.9 -e --source winget \
+            --accept-source-agreements --accept-package-agreements || true
+    fi
+    if ! have_net9; then
+        echo "❌ .NET 9 SDK still not available."
+        echo "   Install it, then re-run: https://dotnet.microsoft.com/download/dotnet/9.0"
+        echo "   (You may need a new terminal so PATH refreshes.)"
+        exit 1
+    fi
 fi
-echo "→ .NET SDK: $(dotnet --version)"
+echo "→ .NET SDK: $(dotnet --version) (9+)"
 
 # --- Build QuadClaude ---
 echo ""
