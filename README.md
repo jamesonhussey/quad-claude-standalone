@@ -61,6 +61,26 @@ get your four terminals.
 
 ---
 
+## Updating
+
+If you cloned the repo, grab the latest with the one-click updater — double-click
+**`update.bat`** (or run it from the install folder). It closes any running
+QuadClaude, `git pull`s, rebuilds, and offers to re-run `setup` so new helper
+commands and config fields are picked up.
+
+Manual equivalent:
+
+```bash
+cd <your-quad-claude-standalone folder>
+git pull
+install.bat        # rebuilds; say Y to re-run setup
+```
+
+Close QuadClaude before updating so the rebuild can replace the running `.exe`.
+(On macOS, `git pull` then rebuild per [SETUP-MAC.md](SETUP-MAC.md).)
+
+---
+
 ## Mental model: shared config, per-quad worktrees
 
 There are only two kinds of state to think about:
@@ -228,3 +248,4 @@ a real machine — and lags behind the Windows app. Try it at your own risk.
 | `monday-tasks.mjs` | CLI backend for the optional Monday panel |
 | `track-cwd.sh` | Writes each quad's cwd + branch for the status widget |
 | `install.bat` / `setup.sh` | Installers (Windows batch / bash fallback) |
+| `update.bat` | One-click updater (pull + rebuild + optional setup) |
